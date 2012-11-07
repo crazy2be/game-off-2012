@@ -29,18 +29,19 @@ Engine.prototype.run = function() {
     window.reqAnim(this.run.bind(this));
 }
 Engine.prototype.update = function() {
+    var bugs = this.bugs;
+    
     for (r = 0; r < hTiles; r++) {
         for (c = 0; c < wTiles; c++) {
             var tile = this.map[r][c];
             tile.hover = false;
             tile.update();
-            var bugs = this.bugs;
             if (tile.object instanceof Tower && tile.object.nextFire < new Date().getTime()) {
                 for (var i = 0; i < bugs.length; i++) {
                     var cent1 = tile.sprite.getCenter();
-                    var cent2 = {x: bugs[i].sprite.x, y: bugs[i].sprite.y};
+                    var cent2 = bugs[i].sprite.getCenter();
                     var dist = Math.sqrt(Math.pow(cent2.x - cent1.x, 2)
-                                + Math.pow(cent2.y - cent1.y, 2)) - bugs[i].sprite.w;
+                                + Math.pow(cent2.y - cent1.y, 2));
                     if (dist < tile.object.range) {
                         tile.object.nextFire = new Date().getTime() + tile.object.coolDown;
                         bugs[i].hp -= tile.object.damage;
@@ -68,7 +69,7 @@ Engine.prototype.update = function() {
             i--;
         } else {
             bugs[i].update();
-            var cen = bugs[i].sprite.getCenter();
+            var cen = bugs[i].getCenter();
             var c1 = Math.floor(cen.x / tileSize);
             var r1 = Math.floor(cen.y / tileSize);
             if (this.map[r1][c1] && this.map[r1][c1].object instanceof Base) {
@@ -111,8 +112,8 @@ Engine.prototype.click = function(e) {
 }
 Engine.prototype.draw = function() {
     pen = this.pen;
-    pen.fillStyle = "black";
-    ink.rect(0, 0, width, height, pen);
+//     pen.fillStyle = "black";
+//     ink.rect(0, 0, width, height, pen);
     pen.font = "25px Helvetica";
     pen.fillStyle = "#2233FF";
     ink.text(10, bH + 30, "Health: " + this.health, pen);
