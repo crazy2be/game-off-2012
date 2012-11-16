@@ -96,14 +96,14 @@ function Path_Line(pathBase) {
 		if (pathBase.nextPath) {
 			var t = pathBase.nextPath.tPos.getCenter();
 			var direction = new Vector(t.x, t.y);
-			direction.subtract(pathBase.tPos.getCenter());
+			direction.sub(pathBase.tPos.getCenter());
 
 			var start = pathBase.tPos.getCenter();
 			//direction.setMag(pathBase.tPos.w / 2);
 			//start.subtract(direction);
 
 			var end = new Vector(start.x, start.y);
-			direction.setMag(pathBase.tPos.w);
+			direction = direction.unit().mult(pathBase.tPos.w);
 			end.add(direction);
 
 			pen.strokeStyle = "blue";
@@ -323,7 +323,7 @@ function Bug(startPath, r) {
 
 		var vecToNext = distBetweenRectsFullOverlap(next.tPos, this.tPos);
 
-		vecToNext.setMag(this.speed);
+		vecToNext = vecToNext.unit().mult(this.speed);
 		this.tPos.dx = vecToNext.x;
 		this.tPos.dy = vecToNext.y;
 
